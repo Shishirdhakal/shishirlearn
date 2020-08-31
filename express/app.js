@@ -4,13 +4,14 @@ const bodyParser =require('body-parser');
 require('./config/dbConnection');
 
 const authRoutes=require('./controllers/auth.routes');
+const userRoutes =require('./controllers/user.routes');
 
 //third party middlewarw
 app.use(bodyParser.urlencoded({extended:false}));
 
-//app.use(bodyParser.json())
 
 app.use('/auth',authRoutes);
+app.use('/user',userRoutes);
 
 app.use(function(req,res,next)
 {
@@ -46,7 +47,7 @@ app.listen(8080,function(err,done){
 //yo app.listen ko muni code lekna hudaina
 //http verb ()method
 //1.get -> newsfeed of facebook (read)
-//2. post ->register page(signup)
+//2. post ->register page(signup),login 
 //3.put ->edit or update page(information)
 //4. delete->delete information
 

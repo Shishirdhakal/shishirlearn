@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const userModel = require('./../model/user.model');
 
@@ -26,22 +28,22 @@ router.get('/home', function (req, res, next) {
             })
     }) */
 
-router.post('/login',(req,res,next)=>{
+router.post('/login', (req, res, next) => {
     userModel.findOne({
-        username:req.body.username
+        username: req.body.username
     })
-    .exec((err,user)=>{
-        if(user){
-            if(user.password == req.body.password){
-                res.json(user);
+        .exec((err, user) => {
+            if (user) {
+             const isMatched = bcrypt.compareSync(req.body.password,user.password);
+                if(isMatched){
+                    res.json(user);
+                }else{
+                    next('Wrong Password');
+                }
+            } else {
+                next('Username Wrong');
             }
-            else{
-                next('Wrong Password');
-            }
-        }else{
-            next('Username Wrong');
-        }
-    })
+        })
 
 })
 
@@ -56,8 +58,9 @@ router.post('/register', function (req, res, next) {
         newUser.emailAddress = req.body.email;
     if (req.body.username)
         newUser.username = req.body.username;
-    if (req.body.password)
-        newUser.password = req.body.password;
+    if (req.body.password){
+        newUser.password= bcrypt.hashSync(req.body.password,saltRounds);
+    }
     if (req.body.number)
         newUser.phoneNumber = req.body.number;
 
