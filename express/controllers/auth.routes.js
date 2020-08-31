@@ -8,43 +8,41 @@ router.get('/home', function (req, res, next) {
     res.end('hi i am from home page');
 });
 
-/* router.post('/login', function (res, req, next) {
-    userModel.findOne({
-        username: req.body.username
-    })
-        .exec(function (err, user) {
-            console.log('user>>>>>>>>>>>',user)
-            if (user) {
-                if (user.password == req.body.password) {
-                    res.json(user);
 
-                } else {
-                    console.log("password didn't match")
-                    next("password didn't match");
-                }
-            } else {
-                console.log("username didn't match")
-                next("username didn't match");
-            }
+/* router.post('/login',(res, req, next) => {
+        userModel.findOne({
+            username: req.body.username
         })
-})
- */
+            .exec((err, user) => {
+                if (user) {
+                    if (user.password == req.body.password) {
+                        res.json(user);
+                    } else {
+                        next("Password Didn't Match");
+                    }
+                } else {
+                    next("Username Didn't Match")
+                }
+            })
+    }) */
 
-router.post('/login',(res,req,next)=>{
+router.post('/login',(req,res,next)=>{
     userModel.findOne({
         username:req.body.username
     })
     .exec((err,user)=>{
-        if (user){
+        if(user){
             if(user.password == req.body.password){
                 res.json(user);
-            }else{
-                next("Password Didn't Match");
+            }
+            else{
+                next('Wrong Password');
             }
         }else{
-            next("Username Didn't Match")
+            next('Username Wrong');
         }
     })
+
 })
 
 router.post('/register', function (req, res, next) {
@@ -71,46 +69,5 @@ router.post('/register', function (req, res, next) {
     })
 })
 
-/* router.post('/login', function (res, req, next) {
-    userModel.findOne({
-        username: req.body.username
-    })
-        .exec(function (err, user) {
-            console.log('user>>>>>>>>>>>',user)
-            if (user) {
-                if (user.password == req.body.password) {
-                    res.json(user);
 
-                } else {
-                    console.log("password didn't match")
-                    next("password didn't match");
-                }
-            } else {
-                console.log("username didn't match")
-                next("username didn't match");
-            }
-        })
-}) */
-
-/* router.route('/login')
-.post(function (res, req, next) {
-    userModel.findOne({
-        username: req.body.username
-    })
-        .exec(function (err, user) {
-            console.log('user>>>>',user)
-            if (user) {
-                if (user.password == req.body.password) {
-                    res.json(user);
-
-                } else {
-                    console.log("password didn't match")
-                    next("password didn't match");
-                }
-            } else {
-                console.log("username didn't match")
-                next("username didn't match");
-            }
-        })
-}) */
 module.exports = router;
